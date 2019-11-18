@@ -7,4 +7,7 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="green"> #9EDBCC</color>
+    <color name="pink">#F2BDDA</color>
+    <color name="lightblue">#9CCED9</color>
+    <color name="orange">#FDE2AD</color>
 </resources>
