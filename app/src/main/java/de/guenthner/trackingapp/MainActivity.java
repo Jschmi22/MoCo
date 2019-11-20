@@ -36,6 +36,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initialize();
+    }
+
+    private void initialize()
+    {
         steps = (TextView)findViewById(R.id.steps);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
@@ -51,9 +56,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         saveBtn = (Button) findViewById(R.id.saveButton);
 
 
-        bikeView.setText("0 km");
-        carView.setText("0 km");
-        opnvView.setText("0 km");
+        bikeView.setText(R.string.init_bars);
+        carView.setText(R.string.init_bars);
+        opnvView.setText(R.string.init_bars);
 
         seekbarBike.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int pval = 0;
@@ -61,15 +66,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 pval = progress;
+                String bikeViewText = pval * 2 + " km";;
+                bikeView.setText(bikeViewText);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //write custom code to on start progress
+
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                bikeView.setText(pval *  10 + " km");
+
             }
 
         });
@@ -81,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 pval = progress;
+                String carViewText = pval * 10 + " km";
+                carView.setText(carViewText);
             }
 
             @Override
@@ -89,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                carView.setText(pval *  2 + " km");
             }
 
         });
@@ -101,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 pval = progress;
-
+                String opnvViewText = pval * 10 + " km";
+                opnvView.setText(opnvViewText);
             }
 
             @Override
@@ -111,9 +120,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                opnvView.setText(pval * 10 + "km");
-
-
             }
         });
 
@@ -121,24 +127,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                seekbarBike.setVisibility(View.INVISIBLE);
-                bikeView.setText("wert gespeichert");
-                seekbarCar.setVisibility(View.INVISIBLE);
-                carView.setText("wert gespeichert");
-                seekbarOpnv.setVisibility(View.INVISIBLE);
-                opnvView.setText("wert gespeichert");
+                disableBars();
             }
 
         });
-
-
-
-
-
-
     }
 
+    private void disableBars()
+    {
+        seekbarBike.setEnabled(false);
+        seekbarCar.setEnabled(false);
+        seekbarOpnv.setEnabled(false);
+    }
 
+    private void enableBars()
+    {
+        seekbarBike.setEnabled(true);
+        seekbarCar.setEnabled(true);
+        seekbarOpnv.setEnabled(true);
+    }
 
     @Override
     protected void onResume(){

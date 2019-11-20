@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1053848937946",
+    "firebase_url": "https://changeit-c22cd.firebaseio.com",
+    "project_id": "changeit-c22cd",
+    "storage_bucket": "changeit-c22cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053848937946:android:10812b2d1d7acbd90c0ce3",
+        "android_client_info": {
+          "package_name": "de.guenthner.trackingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053848937946-q9nvi9e8p1g73poc6dauod791kct5tcq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDajgsqz0qEHS1cHGAzHe-7y1QivN_t8nM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053848937946-q9nvi9e8p1g73poc6dauod791kct5tcq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
