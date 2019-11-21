@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,8 +18,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity
 {
@@ -61,8 +65,32 @@ public class LoginActivity extends AppCompatActivity
 
     public void onLoginClick(View v)
     {
-        Intent signIntent = mSignInClient.getSignInIntent();
-        startActivityForResult(signIntent, RC_SIGN_IN);
+        String email = emailView.getText().toString();
+        String password = passwordView.getText().toString();
+
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this,
+                                new OnCompleteListener<AuthResult>()
+                                {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task)
+                                    {
+                                        if(task.isSuccessful())
+                                        {
+                                            Log.d("AUTH", "signInWithEmail succeded");
+                                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        }
+                                        else
+                                        {
+                                            Log.d("AUTH","signInWithEmail failed");
+                                            Toast.makeText(LoginActivity.this, "Login fehlgeschlagen", Toast.LENGTH_SHORT).show();
+                                        }
+
+                }});
+        
+        //Intent signIntent = mSignInClient.getSignInIntent();
+        //startActivityForResult(signIntent, RC_SIGN_IN);
     }
 
     public void onToRegisterScreenClick(View v)
