@@ -15,6 +15,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     SensorManager sensorManager;
@@ -30,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private  SeekBar seekbarOpnv;
     private TextView opnvView;
     private Button saveBtn;
+    FirebaseUser user;
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +83,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
-
         });
 
 
@@ -131,6 +136,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
 
         });
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        setTitle("Dashboard von: " + user.getDisplayName());
     }
 
     private void disableBars()
