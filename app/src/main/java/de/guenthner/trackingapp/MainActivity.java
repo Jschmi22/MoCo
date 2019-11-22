@@ -1,7 +1,10 @@
 package de.guenthner.trackingapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
 
@@ -9,11 +12,14 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -31,10 +37,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView opnvView;
     private Button saveBtn;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item){
+                switch(item.getItemId()){
+                    case R.id.action_friends:
+                        startActivity(new Intent(MainActivity.this, FriendsActivity.class));
+                        finish();
+                        break;
+                    case R.id.action_dashboard:
+                        startActivity(getIntent());
+                        break;
+                    case R.id.action_settings:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        finish();
+                        break;
+                }
+                return true;
+            }
+
+        });
+
+
 
         initialize();
     }
