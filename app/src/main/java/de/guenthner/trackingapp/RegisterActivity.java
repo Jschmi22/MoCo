@@ -3,23 +3,26 @@ package de.guenthner.trackingapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import de.guenthner.trackingapp.FirebaseDB.Friends;
+import de.guenthner.trackingapp.FirebaseDB.KmInit;
+import de.guenthner.trackingapp.FirebaseDB.UserData;
 
 public class RegisterActivity extends AppCompatActivity
 {
@@ -92,6 +95,11 @@ public class RegisterActivity extends AppCompatActivity
             return;
         }
 
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Bitte warten");
+        progressDialog.setMessage("Account wird erstellt...");
+
+        progressDialog.show();
         
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>()
@@ -101,7 +109,11 @@ public class RegisterActivity extends AppCompatActivity
                     {
                         if(task.isSuccessful())
                         {
+                            progressDialog.setMessage("Account wird eingeloggt...");
+
                             firebaseAuth.signInWithEmailAndPassword(email, password);
+
+                            progressDialog.setMessage("Profil wird initialisiert...");
 
                             final FirebaseUser user = firebaseAuth.getCurrentUser();
                             final String username = usernameView.getText().toString();
@@ -110,28 +122,39 @@ public class RegisterActivity extends AppCompatActivity
                                     .setDisplayName(username)
                                     .build();
 
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>()
-                                    {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
+                            try
+                            {
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>()
                                         {
-                                            if (task.isSuccessful())
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task)
                                             {
-                                                firebaseDatabase = FirebaseDatabase.getInstance().getReference();
+                                                if (task.isSuccessful())
+                                                {
+                                                    progressDialog.setMessage("Datenbank wird initialisiert...");
 
-                                                String userId = user.getUid();
+                                                    firebaseDatabase = FirebaseDatabase.getInstance().getReference();
 
-                                                Long tsLong = System.currentTimeMillis()/1000;
-                                                String timestamp = tsLong.toString();
+                                                    String userId = user.getUid();
 
-                                                writeNewUser(userId, username, email, timestamp, 0, 0, 0, 0);
+                                                    Long tsLong = System.currentTimeMillis()/1000;
+                                                    String timestamp = tsLong.toString();
 
-                                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                                finish();
+                                                    writeNewUser(userId, username, email, timestamp);
+
+                                                    progressDialog.dismiss();
+
+                                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                                    finish();
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                            }
+                            catch (Exception e)
+                            {
+                                Toast.makeText(RegisterActivity.this, "Fehler bei der Erstellung.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         else 
                         {
@@ -141,39 +164,21 @@ public class RegisterActivity extends AppCompatActivity
                 });
     }
 
-    private void writeNewUser(String userId, String username, String email, String timestamp, int kmFeet,
-                              int kmBike, int kmCar, int kmOepnv)
+    private void writeNewUser(String userId, String username, String email, String timestamp)
     {
-        UserData userData = new UserData(username, email, timestamp, kmFeet, kmBike, kmCar, kmOepnv);
+        UserData userData = new UserData(username, email, timestamp);
+        KmInit kmInit = new KmInit(0, 0, 0, 0);
+        Friends friendsInit = new Friends("null");
 
         firebaseDatabase.child("users").child(userId).setValue(userData);
 
+        firebaseDatabase.child("users").child(userId).child("kmAll").setValue(kmInit);
+        firebaseDatabase.child("users").child(userId).child("kmDay").setValue(kmInit);
+        firebaseDatabase.child("users").child(userId).child("kmWeek").setValue(kmInit);
+        firebaseDatabase.child("users").child(userId).child("kmMonth").setValue(kmInit);
+        firebaseDatabase.child("users").child(userId).child("kmYear").setValue(kmInit);
+
+        firebaseDatabase.child("users").child(userId).child("friends").setValue(friendsInit);
     }
 
-    public class UserData
-    {
-        public String username;
-        public String email;
-        public String timestamp;
-        public int kmFeet;
-        public int kmBike;
-        public int kmCar;
-        public int kmOepnv;
-
-        public UserData()
-        {
-
-        }
-
-        public UserData(String username, String email, String timestamp, int kmFeet, int kmBike, int kmCar, int kmOepnv)
-        {
-            this.username = username;
-            this.email = email;
-            this.timestamp = timestamp;
-            this.kmFeet = kmFeet;
-            this.kmBike = kmBike;
-            this.kmCar = kmCar;
-            this.kmOepnv = kmOepnv;
-        }
-    }
 }

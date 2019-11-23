@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-        setTitle("Dashboard von: " + user.getDisplayName());
+        setTitle("Dashboard von " + user.getDisplayName());
     }
 
     private void disableBars()
