@@ -10,14 +10,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.internal.OnConnectionFailedListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -38,7 +34,7 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        setTitle("In Account einloggen");
         initialize();
     }
 
@@ -77,18 +73,27 @@ public class LoginActivity extends AppCompatActivity
                                     {
                                         if(task.isSuccessful())
                                         {
-                                            Log.d("AUTH", "signInWithEmail succeded");
                                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                                            //        if(user.isEmailVerified())
+                                            //        {
+                                                        Log.d("LOGIN", "signInWithEmail succeded");
+
+                                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                        finish();
+                                            //        }
+                                            //        else
+                                            //        {
+                                            //            Toast.makeText(LoginActivity.this, "Bitte bestätigen Sie Ihre Email-Adresse.", Toast.LENGTH_SHORT).show();
+                                            //        }
                                         }
                                         else
                                         {
-                                            Log.d("AUTH","signInWithEmail failed");
+                                            Log.d("LOGIN","signInWithEmail failed");
                                             Toast.makeText(LoginActivity.this, "Login fehlgeschlagen", Toast.LENGTH_SHORT).show();
                                         }
-
                 }});
-        
+
         //Intent signIntent = mSignInClient.getSignInIntent();
         //startActivityForResult(signIntent, RC_SIGN_IN);
     }
@@ -119,4 +124,32 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
+    public void onForgotPasswordClick(View v)
+    {
+        String email = emailView.getText().toString();
+
+        if(email.equals(""))
+        {
+            Toast.makeText(this, "Bitte geben Sie eine Email ein!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            firebaseAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task)
+                        {
+                            if (task.isSuccessful())
+                            {
+                                Toast.makeText(LoginActivity.this, "Email wurde gesendet.", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(LoginActivity.this, "Fehler bei der Email. Email wurde nicht gesendet.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
 }

@@ -6,7 +6,7 @@
     <string name="email_hint">Email-Adresse</string>
     <string name="password_hint">Passwort</string>
     <string name="password_repeat">Passwort wiederholen</string>
-    <string name="register_text">Bitte geben Sie Ihre Email-Adresse und ein Passwort ein: </string>
+    <string name="register_text">Bitte geben Sie Ihre Email-Adresse, einen Nutzernamen und ein Passwort ein: </string>
     <string name="btn_register_text">Registrieren</string>
     <string name="register_to_login">Ich habe bereits einen Account</string>
 
