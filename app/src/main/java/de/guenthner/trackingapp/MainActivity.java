@@ -153,4 +153,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }*/
+
+
+    /*ListView lst;
+    String[] activityName={"Still", "On Foot", "Walking", "Running", "Tilting", "In Vehicle", "On Bicycle", "Unknown Activity"};
+    String[] percentages;
+    int[] imgid={ R.drawable.ic_still,*/
 }
