@@ -20,7 +20,7 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/friend1"
+                android:id="@+id/StepCard"
                 android:layout_width="361dp"
                 android:layout_height="108dp"
                 android:layout_marginStart="20dp"

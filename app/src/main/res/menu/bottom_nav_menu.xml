@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_dashboard"
+        android:id="@+id/action_recents"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_background"
         android:title="Dashboard"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_friends"
+        android:id="@+id/action_favorites"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_background"
         android:title="Friends"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_nearby"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_background"
-        android:title="Settings"
+        android:title="More"
         app:showAsAction="ifRoom" />
 </menu>
