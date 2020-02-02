@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         context = this;
 
+        lst = findViewById(R.id.activities_listview);
+
+
         initialize();
     }
 
@@ -155,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }*/
 
 
-    /*ListView lst;
+    ListView lst;
     String[] activityName={"Still", "On Foot", "Walking", "Running", "Tilting", "In Vehicle", "On Bicycle", "Unknown Activity"};
     String[] percentages;
-    int[] imgid={ R.drawable.ic_still,*/
+    Integer[] imgid={ R.drawable.ic_still, R.drawable.ic_driving, R.drawable.ic_on_bicycle, R.drawable.ic_tilting, R.drawable.ic_running, R.drawable.ic_walking, R.drawable.ic_unknown};
 }

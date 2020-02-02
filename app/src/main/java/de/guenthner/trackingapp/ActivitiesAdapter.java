@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,10 +33,11 @@ public class ActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.detected_activity, parent, false);
         }
 
-        //Retrieve the TextViews where we display the activity type and percentage
+        //Retrieve the TextViews where to display the activity type and percentage
 
         TextView activityName = (TextView) view.findViewById(R.id.activity_type);
         TextView activityConfidenceLevel = (TextView) view.findViewById(R.id.confidence_percentage);
+        ImageView activityImage = (ImageView) view.findViewById(R.id.imageView);
 
         //if Activity is detected
 
@@ -47,6 +49,7 @@ public class ActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
 
             //and confidence percentage
             activityConfidenceLevel.setText(getContext().getString(R.string.percentage, detectedActivity.getConfidence()));
+
         }
         return view;
     }
