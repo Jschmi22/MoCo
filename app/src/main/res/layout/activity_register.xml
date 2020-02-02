@@ -6,38 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".RegisterActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:background="#004085"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/TextAppearance.AppCompat.Display2"
-        app:subtitleTextAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:title="@string/register" />
-
     <EditText
         android:id="@+id/emailRegister"
         android:layout_width="375dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="175dp"
+        android:layout_marginTop="100dp"
         android:ems="10"
         android:hint="@string/email_hint"
         android:inputType="textEmailAddress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/passwordRegister"
         android:layout_width="375dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
@@ -49,7 +35,7 @@
         android:layout_width="375dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
@@ -61,11 +47,12 @@
         android:layout_width="371dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="50dp"
         android:text="@string/register_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/register_text" />
 
     <Button
@@ -89,5 +76,19 @@
         android:text="@string/register_to_login"
         app:layout_constraintBottom_toTopOf="@+id/btn_register"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="375dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="5dp"
+        android:ems="10"
+        android:hint="Nutzername"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/emailRegister"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

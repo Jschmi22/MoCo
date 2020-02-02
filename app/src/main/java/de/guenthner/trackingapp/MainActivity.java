@@ -1,24 +1,17 @@
 package de.guenthner.trackingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.SensorEventListener;
+import android.graphics.Color;
 import android.os.Bundle;
-
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.location.ActivityRecognitionClient;
 import com.google.android.gms.location.DetectedActivity;
@@ -29,6 +22,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Context context;
@@ -37,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private ActivityRecognitionClient mActivityRecognitionClient;
     private ActivitiesAdapter mAdapter;
 
-
-
+    private ListView detectedActivitiesListView;
 
     FirebaseUser user;
     FirebaseAuth firebaseAuth;
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private void initialize()
     {
         //Retrieve the ListView where we’ll display our activity data//
-        ListView detectedActivitiesListView = (ListView) findViewById(R.id.activities_listview);
+        detectedActivitiesListView = (ListView) findViewById(R.id.activities_listview);
 
         ArrayList<DetectedActivity> detectedActivities = DetectedActivitiesIntentService.detectedActivityFromJson(
                 PreferenceManager.getDefaultSharedPreferences(this).getString(
@@ -73,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         setTitle("Dashboard von " + user.getDisplayName());
+
     }
 
 
@@ -131,13 +130,66 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
 
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (s.equals(DETECTED_ACTIVITY)) {
             updateDetectedActivitiesList();
 
         }
+    }
+
+    public void printPercentages(View view)
+    {
+        Log.d("PIE","walking: " + getPercentages().get("walking").toString());
+        Log.d("PIE", "running: " + getPercentages().get("running").toString());
+        Log.d("PIE","vehicle: " + getPercentages().get("in_vehicle").toString());
+        Log.d("PIE", "bicycle: " + getPercentages().get("on_bicycle").toString());
+
+        PieChartView pieChartView = findViewById(R.id.chart);
+
+        List<SliceValue> pieData = new ArrayList<>();
+
+        pieData.add(new SliceValue(Integer.valueOf(getPercentages().get("walking").toString()), Color.GREEN).setLabel("Gegangen"));
+        pieData.add(new SliceValue(Integer.valueOf(getPercentages().get("running").toString()), Color.BLUE).setLabel("Gerannt"));
+        pieData.add(new SliceValue(Integer.valueOf(getPercentages().get("in_vehicle").toString()), Color.MAGENTA).setLabel("Auto"));
+        pieData.add(new SliceValue(Integer.valueOf(getPercentages().get("on_bicycle").toString()), Color.CYAN).setLabel("Fahrrad"));
+
+        PieChartData pieChartData = new PieChartData(pieData);
+        pieChartData.setHasLabels(true);
+
+        pieChartView.setPieChartData(pieChartData);
+    }
+
+    public HashMap getPercentages()
+    {
+        HashMap<String, Integer> map = new HashMap<>();
+
+        int walking = getPercentage(2);
+        int running = getPercentage(3);
+        int in_vehicle = getPercentage(4);
+        int on_bicycle = getPercentage(5);
+
+        map.put("walking", walking);
+        map.put("running", running);
+        map.put("in_vehicle", in_vehicle);
+        map.put("on_bicycle", on_bicycle);
+
+        return  map;
+    }
+
+    public int getPercentage(int i)
+    {
+        DetectedActivity detectedActivity = (DetectedActivity) detectedActivitiesListView.getItemAtPosition(i);
+
+        String detectedActivityText = detectedActivity.toString();
+
+        String[] detectedActivityTextArray = detectedActivityText.split("=");
+
+        detectedActivityText = detectedActivityTextArray[2];
+
+        detectedActivityText = detectedActivityText.substring(0, (detectedActivityText.length() - 1));
+
+        return Integer.valueOf(detectedActivityText);
     }
 
 
